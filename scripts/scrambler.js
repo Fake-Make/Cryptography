@@ -44,6 +44,8 @@ class Scrambler extends Gamma {
 		this.repeatablePart = rawGamma.slice(periodStart);
 	}
 
+	getPeriod() {return this.repeatablePart.length;}
+
 	apply(str) {
 		const origin = new Convertable(str);
 		const originBits = origin.getBinary();
