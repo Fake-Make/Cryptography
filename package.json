@@ -1,0 +1,16 @@
+{
+  "name": "cryptography",
+  "version": "1.0.0",
+  "description": "11-th semester of FAMI NSTU education, Information Safety subject",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cryptography",
+    "information",
+    "security"
+  ],
+  "author": "Dmitry Nevada",
+  "license": "MIT"
+}
