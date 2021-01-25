@@ -18,18 +18,25 @@ class Gamma extends Convertable {
 	getGamma() {return this.gamma;}
 
 	setGamma(gamma) {
+		if (typeof gamma === 'string')
+			gamma = gamma
+				.match(/.{1,8}/g)
+				.map(byte => parseInt(byte, 2));
 		this.length = gamma.length;
 		this.gamma = gamma;
 		this.setBinary(this.gamma
-			.map(byte => byte.toString(2))
+			.map(byte => {
+				byte = byte.toString(2);
+				return '0'.repeat(8 - byte.length) + byte;
+			})
 			.join('')
 		);
 	}
 
 	getLength() {return this.length;}
 
-	setLength(length) {
-		this.setGamma(this._getRandomGamma(length));
+	setLength(chars = 1) {
+		this.setGamma(this._getRandomGamma(chars * 8));
 	}
 
 	apply(str) {
