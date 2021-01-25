@@ -3,3 +3,30 @@
 	color: #ddd;
 	background-color: #333;
 }
+
+.mono {
+	font-family: 'Courier New', Courier, monospace;
+}
+
+.breadcrumb {
+	display: block;
+	margin-bottom: 30px;
+}
+
+label {
+	display: block;
+	margin: 15px;
+}
+
+.control {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.boxed {
+	border: 1px solid #aaa;
+	border-radius: 5px;
+	padding: 5px 10px;
+	margin-bottom: 10px;
+}
