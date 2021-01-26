@@ -1,49 +1,72 @@
-class Gamma extends Convertable {
-	constructor (chars = 1) {
-		super();
-		this.length = chars * 8;
-		this.setGamma(this._getRandomGamma(this.length));
-	}
+class Gamma {
+	static getSimpleGamma(length = 8) {
+		const bytesLength = Math.round(length / 8);
+		let gamma = '';
 
-	_getRandomGamma(length) {
-		let gamma = [];
-
-		for (let i = 0; i < length / 8; i++) {
-			gamma.push(Math.round(Math.random() * 255));
+		for (let i = 0; i < bytesLength; i++) {
+			const byte = Math.round(Math.random() * 255).toString(2);
+			gamma += '0'.repeat(8 - byte.length) + byte;
 		}
+
 		return gamma;
 	}
 
-	getGamma() {return this.gamma;}
+	static getScramblerGamma(length = 8,
+		polynom = '10000110101',
+		state = '1001111'
+	) {
+		// Prepare scrambler
+		const _makeNextIter = () => {
+			const slicedPolynom = polynom.slice(-state.length);
+			let up = parseInt(state.slice(0, 1));
+			let down = parseInt(slicedPolynom.slice(0, 1));
+			let leftUnit = up & down;
 
-	setGamma(gamma) {
-		if (typeof gamma === 'string')
-			gamma = gamma
-				.match(/.{1,8}/g)
-				.map(byte => parseInt(byte, 2));
-		this.length = gamma.length;
-		this.gamma = gamma;
-		this.setBinary(this.gamma
-			.map(byte => {
-				byte = byte.toString(2);
-				return '0'.repeat(8 - byte.length) + byte;
-			})
-			.join('')
-		);
+			for (let i = 1; i < state.length; i++) {
+				up = parseInt(state.slice(i, i + 1));
+				down = parseInt(slicedPolynom.slice(i, i + 1));
+
+				leftUnit ^= up & down;
+			}
+
+			state = leftUnit + state.slice(0, state.length - 1);
+		};
+
+		const states = [];
+		while (!states.includes(state))
+			states.push(state), _makeNextIter();
+
+		const periodStart = states.findIndex(state => state === state);
+		const rawGamma = states
+			.map(state => state.slice(-1))
+			.join('');
+
+		const prefixPart = rawGamma.slice(0, periodStart);
+		const repeatablePart = rawGamma.slice(periodStart);
+		const period = repeatablePart.length;
+
+		// Generate gamma
+		const repeatitions = Math.ceil((length - prefixPart.length) / period);
+		return {
+			gamma: (prefixPart + repeatablePart.repeat(repeatitions)).slice(0, length),
+			period: period
+		};
 	}
 
-	getLength() {return this.length;}
+	static apply(gamma, strBits) {
+		const missingZeroes = '0'.repeat(Math.abs(gamma.length - strBits.length));
+		if (missingZeroes) {
+			gamma.length < strBits.length ?
+				gamma = missingZeroes + gamma :
+				strBits = missingZeroes + strBits;
+		}
 
-	setLength(chars = 1) {
-		this.setGamma(this._getRandomGamma(chars * 8));
-	}
+		let cipher = '';
+		for (let i = 0; i < strBits.length; i++) {
+			cipher += strBits.slice(i, i + 1) ^
+				gamma.slice(i, i + 1);
+		}
 
-	apply(str) {
-		const origin = new Convertable(str);
-		const originBytes = origin.getBytes();
-		const cipheredBytes = originBytes
-			.map((byte, index) => byte ^ this.gamma[index]);
-		origin.setBytes(cipheredBytes);
-		return origin;
+		return cipher;
 	}
 }
