@@ -1,158 +1,142 @@
-// (function() {
-// 	const l = console.log;
+(function() {
+	const l = console.log;
 
-// 	const VIEW_MODS = ['Текст', 'Bin', 'Hex'];
-// 	const baseText = new Convertable($('#base-text').text());
-// 	const gammas = [
-// 		new Gamma(baseText.getString().length),
-// 		new Scrambler(
-// 			$('#polynom').val(),
-// 			$('#initial-value').val()
-// 		)
-// 	];
-// 	let selectedGamma = 0;
-// 	let cipherText = new Convertable('');
+	const VIEWS = ['Текст', 'Bin', 'Hex'];
+	let baseView = 0, cipherView = 0;
+	const toggleView = (selector, view) => {
+		const initState = $(`#${selector}`).val();
+		const newState = [
+			Converter.strToBin.bind(Converter),
+			Converter.binToHex.bind(Converter),
+			Converter.hexToStr.bind(Converter)
+		][view](initState);
+		$(`#${selector}`).val(newState);
+	};
 
-// 	cipherText.viewMode = 0;
-// 	baseText.viewMode = 0;
+	const getBaseBits = () => [
+		Converter.strToBin.bind(Converter),
+		bin => bin,
+		Converter.hexToBin.bind(Converter)
+	][baseView]($('#base-text').val());
 
-// 	$('.view-toggler').on('click', function() {
-// 		const applyableObject = {
-// 			basic: baseText,
-// 			cipher: cipherText
-// 		}[$(this).attr('data-object')];
-// 		const targetField = $('#' + $(this).attr('data-target'));
+	const fillGamma = gamma => {
+		$('#gamma').val(gamma);
+		$('#cipher-apply').prop('disabled', false);
+		makeResearch(gamma);
+	};
 
-// 		switch(applyableObject.viewMode) {
-// 			case 0: applyableObject.setString(targetField.val()); break;
-// 			case 1: applyableObject.setBinary(targetField.val()); break;
-// 			case 2: applyableObject.setHex(targetField.val()); break;
-// 		}
+	$('#gamma').on('change input', function() {
+		$('#cipher-apply').prop('disabled', !$(this).val());
+	});
 
-// 		applyableObject.viewMode = (applyableObject.viewMode + 1) % VIEW_MODS.length;
-// 		$(this).text(VIEW_MODS[applyableObject.viewMode]);
+	$('#random-gamma-button').on('click', function() {
+		const strBits = getBaseBits();
 
-// 		const newView = [
-// 			applyableObject.getString(),
-// 			applyableObject.getBinary(),
-// 			applyableObject.getHex()
-// 		][applyableObject.viewMode];
+		const newGamma = Gamma.getSimpleGamma(strBits.length);
+		fillGamma(newGamma);
+	});
 
-// 		targetField.val(newView);
-// 	});
+	$('#scrambler-gamma-button').on('click', function() {
+		const strBits = getBaseBits();
+		const polynom = $('#polynom').val();
+		const initialValue = $('#initial-value').val();
 
-// 	$('#gamma-type-toggler').on('change', function() {
-// 		$('#scrambler-info').toggle(350);
-// 		selectedGamma = !selectedGamma * 1;
-// 	});
+		const newGamma = Gamma.getScramblerGamma(strBits.length, polynom, initialValue);
+		$('#scrambler-period').text(newGamma.period);
+		fillGamma(newGamma.gamma);
+	});
 
-// 	const generateGamma = () => {
-// 		const baseTextInput = $('#base-text').val();
-// 		baseText[
-// 			['setString', 'setBinary', 'setHex'][baseText.viewMode]
-// 		](baseTextInput);
+	$('#cipher-apply').on('click', function() {
+		const gamma = $('#gamma').val();
+		const strBits = getBaseBits();
 
-// 		gammas[1] = new Scrambler(
-// 			$('#polynom').val(),
-// 			$('#initial-value').val()
-// 		);
+		const cipher = [
+			Converter.binToStr.bind(Converter),
+			bin => bin,
+			Converter.binToHex.bind(Converter)
+		][cipherView](Gamma.apply(gamma, strBits));
 
-// 		gammas[selectedGamma].setLength(baseText.getString().length);
-// 		$('#gamma').val(gammas[selectedGamma].getBinary());
-// 		$('#scrambler-period').text(gammas[1].getPeriod());
+		$('#cipher-text').val(cipher);
+	});
 
-// 		makeResearch(gammas[selectedGamma]);
-// 	};
-// 	const applyCipher = () => {
-// 		const baseTextInput = $('#base-text').val();
-// 		baseText[
-// 			['setString', 'setBinary', 'setHex'][baseText.viewMode]
-// 		](baseTextInput);
-// 		cipherText.setString(
-// 			gammas[selectedGamma].apply(baseText.getString()).getString()
-// 		);
-// 		$('#cipher-text').text(cipherText.getString());
-// 	};
-// 	generateGamma();
-// 	applyCipher();
+	$('#view-toggler-base').on('click', function() {
+		toggleView('base-text', baseView);
+		baseView = (baseView + 1) % VIEWS.length;
+		$(this).text(VIEWS[baseView]);
+	});
 
-// 	$('#gamma-generate').on('click', function() {
-// 		generateGamma();
-// 	});
+	$('#view-toggler-cipher').on('click', function() {
+		toggleView('cipher-text', cipherView);
+		cipherView = (cipherView + 1) % VIEWS.length;
+		$(this).text(VIEWS[cipherView]);
+	});
 
-// 	$('#cipher-apply').on('click', function() {
-// 		gammas[selectedGamma].setGamma(
-// 			$('#gamma').val()
-// 		);
-// 		applyCipher();
-// 	});
+	function makeResearch(gamma) {
+		const set = gamma;
+		const chi2Test = () => {
+			const chi2 = Statistics.chiSquaredTest(set);
+			$('#chi2-value').text(chi2.chi2.toFixed(4));
+			$('#chi2-critical').text(chi2.criticalValue.toFixed(4));
+			$('#chi2-succeed').text({
+				true: 'Да',
+				false: 'Нет'
+			}[chi2.isDistributionUniform.toString()]);
+		};
 
-// 	function makeResearch(gamma) {
-// 		const set = gamma.getBinary();
-// 		const chi2Test = () => {
-// 			const chi2 = Statistics.chiSquaredTest(set);
-// 			$('#chi2-value').text(chi2.chi2.toFixed(4));
-// 			$('#chi2-critical').text(chi2.criticalValue.toFixed(4));
-// 			$('#chi2-succeed').text({
-// 				true: 'Да',
-// 				false: 'Нет'
-// 			}[chi2.isDistributionUniform.toString()]);
-// 		};
+		const balanceTest = () => {
+			const balance = Statistics.balanceTest(set);
+			$('#balanced-test-text').text(
+				balance
+					.map((range, index) => `${index + 1}(${range.length}): Разница составила ${(range.difference * 100).toFixed(0)}%, тест ${
+							{true: 'успешен', false: 'провален'}[range.testSucceed]
+						}`
+					)
+					.join('\n')
+			);
 
-// 		const balanceTest = () => {
-// 			const balance = Statistics.balanceTest(set);
-// 			$('#balanced-test-text').text(
-// 				balance
-// 					.map((range, index) => `${index + 1}(${range.length}): Разница составила ${(range.difference * 100).toFixed(0)}%, тест ${
-// 							{true: 'успешен', false: 'провален'}[range.testSucceed]
-// 						}`
-// 					)
-// 					.join('\n')
-// 			);
+			$('#balanced-succeed').text({
+				true: 'Да',
+				false: 'Нет'
+			}[balance.testSucceed.toString()]);
+		};
 
-// 			$('#balanced-succeed').text({
-// 				true: 'Да',
-// 				false: 'Нет'
-// 			}[balance.testSucceed.toString()]);
-// 		};
+		const cyclicityTest = () => {
+			const cyclicity = Statistics.cyclicityTest(set);
+			$('#cyclicity-test-text').text(
+				cyclicity
+					.map((range, index) => `${index + 1}: Ожидалось ${range.expected.toFixed(4)}, фактически имеется ${range.actual.toFixed(4)}, тест ${
+							{true: 'успешен', false: 'провален'}[range.testSucceed]
+						}`
+					)
+					.join('\n')
+			);
 
-// 		const cyclicityTest = () => {
-// 			const cyclicity = Statistics.cyclicityTest(set);
-// 			$('#cyclicity-test-text').text(
-// 				cyclicity
-// 					.map((range, index) => `${index + 1}: Ожидалось ${range.expected.toFixed(4)}, фактически имеется ${range.actual.toFixed(4)}, тест ${
-// 							{true: 'успешен', false: 'провален'}[range.testSucceed]
-// 						}`
-// 					)
-// 					.join('\n')
-// 			);
+			$('#cyclicity-succeed').text({
+				true: 'Да',
+				false: 'Нет'
+			}[cyclicity.testSucceed.toString()]);
+		};
 
-// 			$('#cyclicity-succeed').text({
-// 				true: 'Да',
-// 				false: 'Нет'
-// 			}[cyclicity.testSucceed.toString()]);
-// 		};
+		const correlationTest = () => {
+			const correlation = Statistics.correlationTest(set);
+			$('#correlation-test-text').text(
+				correlation
+					.map((range, index) => `Сдвиг на ${index + 1}: ${range.accordances} совпадений, ${range.disaccordances} отличий, разница: ${(range.difference_percent * 100).toFixed(0)}%, тест ${
+							{true: 'успешен', false: 'провален'}[range.testSucceed]
+						}`
+					)
+					.join('\n')
+			);
 
-// 		const correlationTest = () => {
-// 			const correlation = Statistics.correlationTest(set);
-// 			$('#correlation-test-text').text(
-// 				correlation
-// 					.map((range, index) => `Сдвиг на ${index + 1}: ${range.accordances} совпадений, ${range.disaccordances} отличий, разница: ${(range.difference_percent * 100).toFixed(0)}%, тест ${
-// 							{true: 'успешен', false: 'провален'}[range.testSucceed]
-// 						}`
-// 					)
-// 					.join('\n')
-// 			);
+			$('#correlation-succeed').text({
+				true: 'Да',
+				false: 'Нет'
+			}[correlation.testSucceed.toString()]);
+		};
 
-// 			$('#correlation-succeed').text({
-// 				true: 'Да',
-// 				false: 'Нет'
-// 			}[correlation.testSucceed.toString()]);
-// 		};
-
-// 		chi2Test();
-// 		balanceTest();
-// 		cyclicityTest();
-// 		correlationTest();
-// 	}
-// })();
+		chi2Test();
+		balanceTest();
+		cyclicityTest();
+		correlationTest();
+	}
+})();

@@ -4,6 +4,11 @@
 	background-color: #333;
 }
 
+section {
+	display: flex;
+	width: 100%;
+}
+
 .mono {
 	font-family: 'Courier New', Courier, monospace;
 }
