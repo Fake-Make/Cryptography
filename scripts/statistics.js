@@ -75,11 +75,11 @@ class Statistics {
 		const series = Object.keys(rangeLengths)
 			.map(length => {
 				const EXPECTED_PERCENT = Math.pow(.5, parseInt(length));
-				const ACTUAL_PERCENT = rangeLengths[length] / TOTAL_RANGES
+				const ACTUAL_PERCENT = rangeLengths[length] / TOTAL_RANGES;
 				return {
 					expected: EXPECTED_PERCENT,
 					actual: ACTUAL_PERCENT,
-					testSucceed: Math.abs(1 - EXPECTED_PERCENT / ACTUAL_PERCENT) < this.SIGNIFICANCE_LEVEL
+					testSucceed: Math.abs(EXPECTED_PERCENT - ACTUAL_PERCENT) < this.SIGNIFICANCE_LEVEL
 				}
 			});
 		series.testSucceed = Object.keys(rangeLengths).every(length => length.testSucceed);

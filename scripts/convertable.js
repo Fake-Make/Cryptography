@@ -22,7 +22,7 @@ class Convertable {
 			.map(byte => {
 				const size = base === 2 ? 8 : 2;
 				byte = byte.toString(base);
-				for (let i = 0; i < byte.length % size; byte = '0' + byte, i++);
+				for (let i = 0; i < size % byte.length; byte = '0' + byte, i++);
 				return byte;
 			})
 			.join('');

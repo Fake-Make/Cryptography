@@ -42,7 +42,6 @@
 	});
 
 	$('#gamma-type-toggler').on('change', function() {
-		// $('#gamma-generate').toggle(350);
 		$('#scrambler-info').toggle(350);
 		selectedGamma = !selectedGamma * 1;
 	});
@@ -84,7 +83,7 @@
 	$('#cipher-apply').on('click', function() {
 		gammas[selectedGamma].setGamma(
 			$('#gamma').val()
-		)
+		);
 		applyCipher();
 	});
 

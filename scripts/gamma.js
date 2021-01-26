@@ -9,9 +9,8 @@ class Gamma extends Convertable {
 		let gamma = [];
 
 		for (let i = 0; i < length / 8; i++) {
-			gamma.push(Math.round(Math.random() * 256));
+			gamma.push(Math.round(Math.random() * 255));
 		}
-
 		return gamma;
 	}
 

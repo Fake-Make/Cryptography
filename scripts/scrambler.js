@@ -18,26 +18,26 @@ class Scrambler extends Gamma {
 				let up = parseInt(this.state.slice(0, 1));
 				let down = parseInt(slicedPolynom.slice(0, 1));
 				let leftUnit = up & down;
-		
+
 				for (let i = 1; i < this.state.length; i++) {
 					up = parseInt(this.state.slice(i, i + 1));
 					down = parseInt(slicedPolynom.slice(i, i + 1));
-		
+
 					leftUnit ^= up & down;
 				}
-		
+
 				this.state = leftUnit + this.state.slice(0, this.state.length - 1);
 			};
-	
+
 			let states = [];
 			while (!states.includes(this.state))
 				states.push(this.state), _makeNextIter();
-	
+
 			const periodStart = states.findIndex(state => state === this.state);
 			const rawGamma = states
 				.map(state => state.slice(-1))
 				.join('');
-	
+
 			this.prefixPart = rawGamma.slice(0, periodStart);
 			this.repeatablePart = rawGamma.slice(periodStart);
 		};
