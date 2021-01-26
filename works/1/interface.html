@@ -15,35 +15,29 @@
 	<a class="breadcrumb" href="../../index.html">< К списку работ</a>
 
 	<div class="control">
+		<h2>Шифрование</h2>
 		<section>
 			<label>
-				<button class="view-toggler" data-object="basic" data-target="base-text">Текст</button>
+				<button id="view-toggler-base" data-object="basic" data-target="base-text">Текст</button>
 				Текст для шифрования:<br>
 				<textarea class="mono" id="base-text" cols="30" rows="10">Hello World!</textarea>
 			</label>
 			<label>
-				Тип гаммы:<br>
-				<select id="gamma-type-toggler">
-					<option value="0" selected>Случайная</option>
-					<option value="1">Скремблер</option>
-				</select>
-			</label>
-			<label>
 				Гамма:<br>
 				<textarea class="mono" id="gamma" cols="30" rows="4"></textarea><br>
-				<button id="gamma-generate">Сгенерировать</button>
+				<button id="random-gamma-button">Случайная</button>
+				<button id="scrambler-gamma-button">Скрамблер</button>
+				<button id="cipher-apply" disabled>Шифровать</button>
 			</label>
 			<label>
-				<button class="view-toggler" data-object="cipher" data-target="cipher-text">Текст</button>
+				<button id="view-toggler-cipher" data-object="cipher" data-target="cipher-text">Текст</button>
 				Шифрованный текст:<br>
 				<textarea class="mono" id="cipher-text" cols="30" rows="10" readonly></textarea>
 			</label>
-			<button id="cipher-apply">
-				Гаммировать
-			</button>
 		</section>
+		<h2>Параметры скремблера</h2>
 		<section>
-			<div class="boxed" id="scrambler-info" style="display:none">
+			<div class="boxed" id="scrambler-info">
 				<label>
 					Полином для скремблера:<br>
 					<select id="polynom">
@@ -64,27 +58,25 @@
 					<span id="scrambler-period">0</span>
 				</label>
 			</div>
-
+		</section>
+		<h2>Исследование гаммы</h2>
+		<section>
 			<label class="boxed">
 				Равномерность по χ<sup>2</sup>:<br>
 				Значение χ<sup>2</sup>: <span id="chi2-value"></span><br>
 				Критическое значение: <span id="chi2-critical"></span><br>
 				Последовательность равномерна: <span id="chi2-succeed"></span>
 			</label>
-
 			<label class="boxed">
 				Сбалансированность:<br>
 				<textarea class="mono" id="balanced-test-text" cols="30" rows="10"></textarea><br>
 				Последовательность сбалансированна: <span id="balanced-succeed"></span>
 			</label>
-		</section>
-		<section>
 			<label class="boxed">
 				Цикличность:<br>
 				<textarea class="mono" id="cyclicity-test-text" cols="30" rows="10"></textarea><br>
 				Последовательность циклична: <span id="cyclicity-succeed"></span>
 			</label>
-
 			<label class="boxed">
 				Коррелированность:<br>
 				<textarea class="mono" id="correlation-test-text" cols="30" rows="10"></textarea><br>
