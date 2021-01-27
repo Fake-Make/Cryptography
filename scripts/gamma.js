@@ -36,7 +36,7 @@ class Gamma {
 		while (!states.includes(state))
 			states.push(state), _makeNextIter();
 
-		const periodStart = states.findIndex(state => state === state);
+		const periodStart = states.findIndex(iterState => iterState === state);
 		const rawGamma = states
 			.map(state => state.slice(-1))
 			.join('');
