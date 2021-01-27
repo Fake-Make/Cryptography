@@ -4,6 +4,7 @@ class FeistelsNetwork {
 	// номер i, продолжается до последнего бита ключа и при его достижении
 	// циклически повторяется, начиная с 1 бита;
 	static _getSubkeyA = (key, i) => {
+		i = key.length - i;
 		key = key.slice(i) + key.slice(0, i);
 		return key.repeat(Math.ceil(32 / key.length)).slice(0, 32);
 	};
@@ -13,7 +14,8 @@ class FeistelsNetwork {
 	// для скремблера вида 00000011. Подключом является сгенерированная
 	// этим скремблером последовательность из 32-х бит;
 	static _getSubkeyB = (key, i) => {
-		const initState = key.slice(i, i + 8);
+		i = key.length - i;
+		const initState = key.slice(i - 8, i);
 		const polynom = '00000011';
 		return Gamma.getScramblerGamma(32, polynom, initState).gamma;
 	};
@@ -59,19 +61,22 @@ class FeistelsNetwork {
 		];
 	}
 
-	static _encryptBlock = (bits64, key, vfCase = 3) => {
+	static _encryptBlock = (bits64, key, vfCase, direct) => {
 		let blocks = bits64.match(/.{1,32}/g);
-		for (let i = 1; i <= 16; i++) {
+
+		for (let i = direct ? 1 : 16;
+			direct ? i <= 16 : i >= 1;
+			i += direct ? 1 : -1) {
 			blocks = this._iterateBlocks(blocks, key, i, vfCase);
 		}
 
-		return blocks.join('');
+		return blocks.reverse().join('');
 	}
 
-	static encrypt = (bits, key, vfCase = 3) => {
+	static apply = (bits, key, vfCase = 3, direct = true) => {
 		return ('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
 			.match(/.{1,64}/g)
-			.map(block => this._encryptBlock(block, key, vfCase))
+			.map(block => this._encryptBlock(block, key, vfCase, direct))
 			.join('');
 	}
 }
