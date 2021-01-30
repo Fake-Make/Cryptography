@@ -1,3 +1,6 @@
+# Trello board
+This project has now a [Trello board](https://trello.com/b/VxXY1Ql1/cryptography-11-th-semester) with enumerated tasks. 
+
 # NgCryptography
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.7.
