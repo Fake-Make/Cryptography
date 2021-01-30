@@ -1,5 +1,5 @@
-class Gamma {
-	static getSimpleGamma(length = 8) {
+export class Gamma {
+	static getSimpleGamma(length = 8): string {
 		const bytesLength = Math.round(length / 8);
 		let gamma = '';
 
@@ -14,13 +14,13 @@ class Gamma {
 	static getScramblerGamma(length = 8,
 		polynom = '10000110101',
 		state = '1001111'
-	) {
+	): {gamma: string, period: number} {
 		// Prepare scrambler
-		const _makeNextIter = () => {
-			const slicedPolynom = polynom.slice(-state.length);
-			let up = parseInt(state.slice(0, 1));
-			let down = parseInt(slicedPolynom.slice(0, 1));
-			let leftUnit = up & down;
+		const _makeNextIter = (): void => {
+			const slicedPolynom: string = polynom.slice(-state.length);
+			let up: number = parseInt(state.slice(0, 1));
+			let down: number = parseInt(slicedPolynom.slice(0, 1));
+			let leftUnit: number = up & down;
 
 			for (let i = 1; i < state.length; i++) {
 				up = parseInt(state.slice(i, i + 1));
@@ -32,28 +32,28 @@ class Gamma {
 			state = leftUnit + state.slice(0, state.length - 1);
 		};
 
-		const states = [];
+		const states: string[] = [];
 		while (!states.includes(state))
 			states.push(state), _makeNextIter();
 
 		const periodStart = states.findIndex(iterState => iterState === state);
 		const rawGamma = states
-			.map(state => state.slice(-1))
+			.map((state: string) => state.slice(-1))
 			.join('');
 
-		const prefixPart = rawGamma.slice(0, periodStart);
-		const repeatablePart = rawGamma.slice(periodStart);
-		const period = repeatablePart.length;
+		const prefixPart: string = rawGamma.slice(0, periodStart);
+		const repeatablePart: string = rawGamma.slice(periodStart);
+		const period: number = repeatablePart.length;
 
 		// Generate gamma
-		const repeatitions = Math.ceil((length - prefixPart.length) / period);
+		const repeatitions: number = Math.ceil((length - prefixPart.length) / period);
 		return {
 			gamma: (prefixPart + repeatablePart.repeat(repeatitions)).slice(0, length),
 			period: period
 		};
 	}
 
-	static apply(gamma, strBits) {
+	static apply(gamma: string, strBits: string): string {
 		const missingZeroes = '0'.repeat(Math.abs(gamma.length - strBits.length));
 		if (missingZeroes) {
 			gamma.length < strBits.length ?
@@ -63,8 +63,8 @@ class Gamma {
 
 		let cipher = '';
 		for (let i = 0; i < strBits.length; i++) {
-			cipher += strBits.slice(i, i + 1) ^
-				gamma.slice(i, i + 1);
+			cipher += +strBits.slice(i, i + 1) ^
+				+gamma.slice(i, i + 1);
 		}
 
 		return cipher;
