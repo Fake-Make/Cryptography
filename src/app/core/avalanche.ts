@@ -15,7 +15,7 @@ export class Avalanche {
 		}
 
 		return {
-			x: Object.keys(differenceBits).map(str => +str),
+			x: Object.keys(differenceBits),
 			y: differenceBits
 		};
 	}
