@@ -90,6 +90,7 @@ export class FeistelsNetwork {
 	getAvalanche = (): string[] => this.avalanche;
 
 	apply = (bits: string, direct = true): string => {
+		this.avalanche = [];
 		return (('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
 			.match(/.{1,64}/g) || [])
 			.map((block: string): string => this._encryptBlock(block, direct))
