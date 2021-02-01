@@ -1,9 +1,10 @@
-<ul>
-	<li><a routerLink="">Главная</a></li>
-	<li><a routerLink="works/1">Лабораторная работа #1</a></li>
-	<li><a routerLink="works/2">Лабораторная работа #2</a></li>
-	<li><a routerLink="works/3">Лабораторная работа #3</a></li>
-	<li><a routerLink="works/4">Лабораторная работа #4</a></li>
-	<li><a routerLink="works/5">Лабораторная работа #5</a></li>
-	<li><a routerLink="works/6">Лабораторная работа #6</a></li>
-</ul>
+<mat-list>
+	<mat-list-item routerLink="" matRipple>
+		Главная
+	</mat-list-item>
+	<mat-divider></mat-divider>
+	<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]"
+		[routerLink]="'works/' + work" matRipple>
+		Лабораторная работа #{{ work }}
+	</mat-list-item>
+</mat-list>

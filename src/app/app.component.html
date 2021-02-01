@@ -1,12 +1,8 @@
-<aside>
-  <app-nav-menu></app-nav-menu>
-</aside>
-<header>
-
-</header>
-<main>
-  <router-outlet></router-outlet>
-</main>
-<footer>
-
-</footer>
+<mat-sidenav-container class="full-width">
+	<mat-sidenav mode="side" opened>
+    <app-nav-menu></app-nav-menu>
+  </mat-sidenav>
+	<mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
