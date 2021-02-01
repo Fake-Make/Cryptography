@@ -1,1 +1,58 @@
-<p>work2 works!</p>
+<h1>ПСЗИ — Лабораторная работа #2</h1>
+
+<h2>Сеть фейстеля</h2>
+<label>
+	<button (click)="changeView('base')">{{ viewModes[views.base] }}</button>
+	Исходный текст:<br>
+	<textarea cols="30" rows="10" [(ngModel)]="base"></textarea>
+</label><br>
+
+<label>
+	<button (click)="changeView('gamma')">{{ viewModes[views.gamma] }}</button>
+	Гамма:<br>
+	<textarea cols="30" rows="10" [(ngModel)]="gamma"></textarea>
+</label><br>
+<button (click)="getGamma('random')">Случайная</button>
+<button (click)="getGamma('scrambler')">Скремблер</button><br>
+
+<label>Параметры сети Фейстеля:<br>
+	<select [(ngModel)]="vfCase">
+		<option value="0">Подключ цикличным сдвигом, единичная образующая функция</option>
+		<option value="1">Подключ цикличным сдвигом, образующая функция S(X) ^ V</option>
+		<option value="2">Подключ по скремблеру, единичная образующая функция</option>
+		<option value="3">Подключ по скремблеру, образующая функция S(X) ^ V</option>
+	</select>
+</label><br>
+<button (click)="applyFeistel('direct')">Шифровать</button>
+<button (click)="applyFeistel('reverse')">Дешифровать</button><br>
+
+<label>
+	<button (click)="changeView('cipher')">{{ viewModes[views.cipher] }}</button>
+	Шифротекст:<br>
+	<textarea cols="30" rows="10" [(ngModel)]="cipher"></textarea>
+</label><br>
+
+<h2>Лавинный ээфект</h2>
+<label>Цель изменений:<br>
+	<select [(ngModel)]="target">
+		<option value="base">Исходный текст</option>
+		<option value="gamma">Ключ</option>
+	</select>
+</label><br>
+
+<label>
+	Номер изменяемого бита:<br>
+	<input type="number" min="1" max="64" [(ngModel)]="targetBit">
+</label><br>
+
+<button (click)="updatePlots()"
+	[disabled]="gamma.length === 0 || base.length === 0">Построить график</button>
+
+<div style="display: block; width: 800px"
+	*ngIf="lineChartData[0].data.length !== 1">
+	<canvas baseChart
+		[datasets]="lineChartData"
+		[labels]="lineChartLabels"
+		chartType="line">
+	</canvas>
+</div>

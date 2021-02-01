@@ -3,7 +3,7 @@ import { Gamma } from '@core/gamma';
 export class Avalanche {
 	private static FEISTEL_ITERATIONS = 16;
 
-	static getPlot(setsA: string[], setsB: string[]): any {
+	static getDifferences(setsA: string[], setsB: string[]): number[] {
 		const differenceBits = [];
 		for (let i = 0; i < this.FEISTEL_ITERATIONS + 2; i++) {
 			differenceBits.push(
@@ -14,9 +14,6 @@ export class Avalanche {
 			);
 		}
 
-		return {
-			x: Object.keys(differenceBits),
-			y: differenceBits
-		};
+		return differenceBits;
 	}
 }
