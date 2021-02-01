@@ -1,1 +1,32 @@
-<p>about works!</p>
+<h1 class="mat-headline">Программные средства защиты информации</h1>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">Бригада #4</h2>
+
+<mat-card class="example-card">
+	<mat-card-header>
+		<div mat-card-avatar class="header-image-dmitry"></div>
+		<mat-card-title>Вегнер Дмитрий</mat-card-title>
+		<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
+	</mat-card-header>
+</mat-card>
+
+<mat-card class="example-card">
+	<mat-card-header>
+		<div mat-card-avatar class="header-image-michael"></div>
+		<mat-card-title>Долгушин Михаил</mat-card-title>
+		<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
+	</mat-card-header>
+</mat-card>
+
+<h2 class="mat-title">Отчёты</h2>
+<mat-list>
+	<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]" matRipple
+		(click)="downloadWork(work)">
+			Отчёт по работе #{{ work }}
+	</mat-list-item>
+</mat-list>
+
+<h2 class="mat-title">Ссылки</h2>
+<a mat-stroked-button href="https://github.com/Fake-Make/Cryptography" target="_blank">GitHub</a>
+<a style="margin-left:20px" mat-stroked-button href="https://trello.com/b/VxXY1Ql1/" target="_blank">Trello</a>
