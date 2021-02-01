@@ -1,0 +1,22 @@
+.example-card {
+	width: 400px;
+	margin: 20px;
+}
+
+.header-image-dmitry {
+	background-image: url('../../../assets/dmitry.jpg');
+	background-size: cover;
+}
+
+.header-image-michael {
+	background-image: url('../../../assets/michael.jpg');
+	background-size: cover;
+}
+
+mat-list {
+	width: 250px;
+}
+
+mat-list-item:hover {
+	cursor: default;
+}
