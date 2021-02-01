@@ -8,7 +8,8 @@
       "@app/*": ["src/app/*"],
       "@components/*": ["src/app/components/*"],
       "@works/*": ["src/app/components/works/work*"],
-      "@core/*": ["src/app/core/*"]
+      "@core/*": ["src/app/core/*"],
+      "@external/*": ["src/app/external/*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
