@@ -1,10 +1,13 @@
 <mat-list>
-	<mat-list-item routerLink="" matRipple>
+	<mat-list-item routerLink="/" matRipple
+	routerLinkActive="selected"
+	[routerLinkActiveOptions]="{exact:true}">
 		Главная
 	</mat-list-item>
 	<mat-divider></mat-divider>
 	<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]"
-		[routerLink]="'works/' + work" matRipple>
+		[routerLink]="'works/' + work" matRipple
+		routerLinkActive="selected">
 		Лабораторная работа #{{ work }}
 	</mat-list-item>
 </mat-list>

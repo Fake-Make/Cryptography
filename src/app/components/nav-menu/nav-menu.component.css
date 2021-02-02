@@ -1,3 +1,12 @@
 mat-list-item:hover {
 	cursor: default;
 }
+
+mat-list-item:focus,
+mat-list-item:active {
+	outline-color: #333;
+}
+
+mat-list-item.selected {
+	background-color: #666;
+}
