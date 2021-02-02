@@ -10,7 +10,10 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatRippleModule } from '@angular/material/core';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [],
@@ -24,7 +27,11 @@ import { MatRippleModule } from '@angular/material/core';
     MatDividerModule,
     MatSidenavModule,
     MatListModule,
-    MatRippleModule
+    MatRippleModule,
+    MatSelectModule,
+    MatInputModule,
+    MatExpansionModule,
+    MatBadgeModule
   ],
   exports: [
     MatCardModule,
@@ -35,7 +42,11 @@ import { MatRippleModule } from '@angular/material/core';
     MatDividerModule,
     MatSidenavModule,
     MatListModule,
-    MatRippleModule
+    MatRippleModule,
+    MatSelectModule,
+    MatInputModule,
+    MatExpansionModule,
+    MatBadgeModule
   ]
 })
 export class MaterialModule { }

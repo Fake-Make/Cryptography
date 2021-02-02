@@ -82,7 +82,7 @@ export class Statistics {
 					testSucceed: Math.abs(EXPECTED_PERCENT - ACTUAL_PERCENT) < this.SIGNIFICANCE_LEVEL
 				}
 			});
-		series.testSucceed = Object.keys(rangeLengths).every((length: string): boolean => rangeLengths[length].testSucceed);
+		series.testSucceed = Object.keys(rangeLengths).every((length: string): boolean => series[+length - 1].testSucceed);
 
 		return series;
 	}

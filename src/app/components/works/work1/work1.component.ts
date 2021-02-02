@@ -73,7 +73,7 @@ export class Work1Component implements OnInit {
 
     const chi2 = Statistics.chiSquaredTest(set);
     this.tests.chi2 = `Значение χ2: ${chi2.chi2.toFixed(4)}. ` + 
-      `Критическое значение: ${chi2.criticalValue}. Гипотеза о равномерности ` +
+      `Критическое значение: ${chi2.criticalValue}.\nГипотеза о равномерности ` +
       `последовательности гаммы ${chi2.isDistributionUniform ? 'подтверждается' :
       'отклоняется'}.`;
 
