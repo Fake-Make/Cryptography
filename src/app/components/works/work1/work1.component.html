@@ -1,64 +1,101 @@
-<h1>ПСЗИ — Лабораторная работа #1</h1>
+<h1 class="mat-header">ПСЗИ — Лабораторная работа #1</h1>
+<mat-divider></mat-divider>
 
-<div class="control">
-	<h2>Шифрование</h2>
+<h2 class="mat-title">Шифрование</h2>
+<div class="wrapper">
 	<section>
-		<label>
-			<button (click)="changeView('base')">{{ viewModes[views.base] }}</button>
-			Текст для шифрования:<br>
-			<textarea class="mono" cols="30" rows="10" [(ngModel)]="base"></textarea>
-		</label>
-		<label>
-			<button (click)="changeView('gamma')">{{ viewModes[views.gamma] }}</button>
-			Гамма:<br>
-			<textarea class="mono" id="gamma" cols="30" rows="4" [(ngModel)]="gamma"></textarea><br>
-			<button (click)="getSimpleGamma()">Случайная</button>
-			<button (click)="getScramblerGamma()">Скрамблер</button>
-			<button (click)="applyCipher()">Шифровать</button>
-		</label>
-		<label>
-			<button (click)="changeView('cipher')">{{ viewModes[views.cipher] }}</button>
-			Шифрованный текст:<br>
-			<textarea class="mono" cols="30" rows="10" [(ngModel)]="cipher" readonly></textarea>
-		</label>
+		<button (click)="changeView('base')" mat-stroked-button color="accent">
+			{{ viewModes[views.base] }}
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Текст для шифрования</mat-label>
+			<textarea matInput placeholder="Hello World!" cols="40" rows="4"
+				class="mono" [(ngModel)]="base"></textarea>
+		</mat-form-field>
 	</section>
-	<h2>Параметры скремблера</h2>
+	<br>
+
 	<section>
-		<div class="boxed" id="scrambler-info">
-			<label>
-				Полином для скремблера:
-				<select [(ngModel)]="polynom">
-					<option *ngFor="let p of polynoms" [ngValue]="p.value">{{p.preview}}</option>
-				</select>
-				<br>
-			</label>
-			<label>
-				Исходное состояние скремблера:
-				<input type="text" pattern="[01]+" [(ngModel)]="initVal">
-				<br>
-			</label>
-			<label>
-				Период скремблера: {{ period }}
-			</label>
-		</div>
+		<button (click)="changeView('gamma')" mat-stroked-button color="accent">
+			{{ viewModes[views.gamma] }}
+		</button>
+		<button (click)="getSimpleGamma()" mat-stroked-button color="primary" class="ml-20">
+			Случайная
+		</button>
+		<button (click)="getScramblerGamma()" mat-stroked-button color="primary" class="ml-20">
+			Скремблер
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Гамма</mat-label>
+			<textarea matInput cols="40" rows="4"
+				class="mono" [(ngModel)]="gamma"></textarea>
+		</mat-form-field>
 	</section>
-	<h2>Исследование гаммы</h2>
+	<br>
+
 	<section>
-		<h3>Равномерность по χ<sup>2</sup></h3>
-		<p *ngIf="tests && tests.chi2">
-			{{ tests.chi2 }}
-		</p>
-		<h3>Сбалансированность</h3>
-		<p *ngIf="tests && tests.balance">
-			{{ tests.balance }}
-		</p>
-		<h3>Цикличность</h3>
-		<p *ngIf="tests && tests.cyclicity">
-			{{ tests.cyclicity}}
-		</p>
-		<h3>Коррелированность</h3>
-		<p *ngIf="tests && tests.correlation">
-			{{ tests.correlation}}
-		</p>
+		<button (click)="changeView('cipher')" mat-stroked-button color="accent">
+			{{ viewModes[views.cipher] }}
+		</button>
+		<button (click)="applyCipher()" mat-stroked-button color="primary" class="ml-20">
+			Шифровать
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Шифрованный текст</mat-label>
+			<textarea matInput cols="40" rows="4"
+				class="mono" [(ngModel)]="cipher"></textarea>
+		</mat-form-field>
 	</section>
 </div>
+<mat-divider></mat-divider>
+
+<h2>Параметры скремблера</h2>
+<mat-form-field appearance="fill">
+	<mat-label>Полином для скремблера</mat-label>
+	<mat-select [(ngModel)]="polynom">
+		<mat-option *ngFor="let p of polynoms" [value]="p.value">{{p.preview}}</mat-option>
+	</mat-select>
+</mat-form-field>
+<br>
+<mat-form-field>
+    <mat-label>Исходное состояние скремблера</mat-label>
+    <input matInput [placeholder]="initVal" [value]="initVal" pattern="[01]+">
+</mat-form-field>
+<br>
+<mat-label>Период скремблера: {{ period }}</mat-label>
+<br><br>
+<mat-divider *ngIf="tests &&
+	tests.chi2 && tests.balance && tests.cyclicity && tests.correlation"></mat-divider>
+
+<h2 *ngIf="tests && tests.chi2 && tests.balance && tests.cyclicity && tests.correlation"
+	class="mat-header">Исследование гаммы</h2>
+<mat-accordion *ngIf="tests &&
+	tests.chi2 && tests.balance && tests.cyclicity && tests.correlation">
+	<mat-expansion-panel hideToggle>
+		<mat-expansion-panel-header>
+			<mat-panel-title>Равномерность по χ<sup>2</sup></mat-panel-title>
+		</mat-expansion-panel-header>
+		<pre>{{ tests.chi2 }}</pre>
+	</mat-expansion-panel>
+	<mat-expansion-panel hideToggle>
+		<mat-expansion-panel-header>
+			<mat-panel-title>Сбалансированность</mat-panel-title>
+		</mat-expansion-panel-header>
+		<pre>{{ tests.balance }}</pre>
+	</mat-expansion-panel>
+	<mat-expansion-panel hideToggle>
+		<mat-expansion-panel-header>
+			<mat-panel-title>Цикличность</mat-panel-title>
+		</mat-expansion-panel-header>
+		<pre>{{ tests.cyclicity }}</pre>
+	</mat-expansion-panel>
+	<mat-expansion-panel hideToggle>
+		<mat-expansion-panel-header>
+			<mat-panel-title>Коррелированность</mat-panel-title>
+		</mat-expansion-panel-header>
+		<pre>{{ tests.correlation }}</pre>
+	</mat-expansion-panel>
+</mat-accordion>
