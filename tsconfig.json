@@ -11,7 +11,7 @@
       "@core/*": ["src/app/core/*"],
       "@external/*": ["src/app/external/*"]
     },
-    "outDir": "./dist/out-tsc",
+    "outDir": "./docs",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
