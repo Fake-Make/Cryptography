@@ -1,1 +1,95 @@
-<p>work3 works!</p>
+<h1 class="mat-header">ПСЗИ — Лабораторная работа #3</h1>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	DES
+	<mat-slide-toggle
+        color="primary"
+        [(ngModel)]="checkedGost"
+		(click)="gamma = '';
+			targetBit = checkedGost && +targetBit > 64 ? '64' : targetBit">
+        ГОСТ
+    </mat-slide-toggle>
+</h2>
+<div class="wrapper">
+	<section>
+		<button (click)="changeView('base')" mat-stroked-button color="accent">
+			{{ viewModes[views.base] }}
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Текст для шифрования</mat-label>
+			<textarea matInput placeholder="Hello World!" cols="40" rows="9"
+				class="mono" [(ngModel)]="base"></textarea>
+		</mat-form-field>
+	</section>
+
+	<section>
+		<button (click)="changeView('gamma')" mat-stroked-button color="accent">
+			{{ viewModes[views.gamma] }}
+		</button>
+		<button (click)="getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+			Случайная
+		</button>
+		<button (click)="getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+			Скремблер
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Гамма</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="gamma"></textarea>
+		</mat-form-field>
+	</section>
+
+	<section>
+		<button (click)="changeView('cipher')" mat-stroked-button color="accent">
+			{{ viewModes[views.cipher] }}
+		</button>
+		<button (click)="applyCipher('direct')" mat-stroked-button color="primary" class="ml-20">
+			Шифровать
+		</button>
+		<button (click)="applyCipher('reverse')" mat-stroked-button color="primary" class="ml-20">
+			Дешифровать
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Шифрованный текст</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="cipher"></textarea>
+		</mat-form-field>
+	</section>
+</div>
+<mat-divider></mat-divider>
+
+<h2>Критерии лавинного эффекта</h2>
+<button (click)="updateResearches()" mat-stroked-button color="primary"
+	[disabled]="gamma.length === 0 || base.length === 0">Провести исследования</button>
+<br><pre class="mono">{{ researches }}</pre><br>
+<mat-divider></mat-divider>
+
+<h2>Лавинный эффект</h2>
+<mat-form-field appearance="fill" class="w-270">
+	<mat-label>Цель изменений</mat-label>
+	<mat-select [(ngModel)]="target">
+		<mat-option value="base">Исходный текст</mat-option>
+		<mat-option value="gamma">Ключ</mat-option>
+	</mat-select>
+</mat-form-field>
+<br>
+<mat-form-field>
+    <mat-label>Номер изменяемого бита</mat-label>
+    <input type="number" min="1" [max]="checkedGost ? 256 : 64" matInput [(ngModel)]="targetBit">
+</mat-form-field>
+<br>
+<button (click)="updatePlots()" mat-stroked-button color="primary"
+	[disabled]="gamma.length === 0 || base.length === 0">Построить график</button>
+
+<div style="display: block; width: 100%"
+	*ngIf="lineChartData[0].data.length !== 1">
+	<canvas baseChart
+		[datasets]="lineChartData"
+		[labels]="lineChartLabels"
+		chartType="line">
+	</canvas>
+</div>

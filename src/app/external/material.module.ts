@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule} from '@angular/material/button';
@@ -14,25 +13,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
-  declarations: [],
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDividerModule,
-    MatSidenavModule,
-    MatListModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatInputModule,
-    MatExpansionModule,
-    MatBadgeModule
-  ],
   exports: [
     MatCardModule,
     MatButtonModule,
@@ -46,7 +29,8 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatSelectModule,
     MatInputModule,
     MatExpansionModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSlideToggleModule
   ]
 })
 export class MaterialModule { }
