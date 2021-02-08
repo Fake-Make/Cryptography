@@ -14,7 +14,7 @@ export class FeistelsNetwork {
 	// 32-х подряд идущих бит заданного ключа, которая начинается с бита
 	// номер i, продолжается до последнего бита ключа и при его достижении
 	// циклически повторяется, начиная с 1 бита;
-	_getSubkeyA = (i: number): string => {
+	private getSubkeyA = (i: number): string => {
 		let key = this.key;
 		i = key.length - i;
 		key = key.slice(i) + key.slice(0, i);
@@ -25,7 +25,7 @@ export class FeistelsNetwork {
 	// подряд идущих битов ключа, которая является начальным значением
 	// для скремблера вида 00000011. Подключом является сгенерированная
 	// этим скремблером последовательность из 32-х бит;
-	_getSubkeyB = (i: number): string => {
+	private getSubkeyB = (i: number): string => {
 		let key = this.key;
 		i = key.length - i;
 		const initState = key.slice(i - 8, i);
@@ -34,13 +34,13 @@ export class FeistelsNetwork {
 	};
 
 	// Единичная образующая функция
-	_generatingFunctionA = (Vi: string): string => Vi;
+	private generatingFunctionA = (Vi: string): string => Vi;
 
 	// Функция имеет вид F(V, X) = S(X) ^ V, где S(X) – левая часть
 	// шифруемого блока, на которую посредством операции XOR
 	// была наложена 32-хбитная последовательность, сгенерированная 16-ти разрядным
 	// скремблером вида 01000000 00000011;
-	_generatingFunctionB = (Vi: string, bits32: string): string => {
+	private generatingFunctionB = (Vi: string, bits32: string): string => {
 		const polynom = '0100000000000011';
 		const scramblerGamma: string = Gamma.getScramblerGamma(32, polynom).gamma;
 
@@ -48,13 +48,13 @@ export class FeistelsNetwork {
 		return Gamma.apply(Vi, sOfX);
 	};
 
-	_iterateBlocks = (blocks: string[], i: number): string[] => {
+	private iterateBlocks = (blocks: string[], i: number): string[] => {
 		const selectedMethods = [
-			{v: this._getSubkeyA, f: this._generatingFunctionA},
-			{v: this._getSubkeyA, f: this._generatingFunctionB},
-			{v: this._getSubkeyB, f: this._generatingFunctionA},
-			{v: this._getSubkeyB, f: this._generatingFunctionB},
-		][this.vfCase % 4] || {v: this._getSubkeyB, f: this._generatingFunctionB};
+			{v: this.getSubkeyA, f: this.generatingFunctionA},
+			{v: this.getSubkeyA, f: this.generatingFunctionB},
+			{v: this.getSubkeyB, f: this.generatingFunctionA},
+			{v: this.getSubkeyB, f: this.generatingFunctionB},
+		][this.vfCase % 4] || {v: this.getSubkeyB, f: this.generatingFunctionB};
 
 		const left32: string = blocks[0];
 		const right32: string = blocks[1];
@@ -72,14 +72,14 @@ export class FeistelsNetwork {
 		];
 	}
 
-	_encryptBlock = (bits64: string, direct: boolean): string => {
+	private encryptBlock = (bits64: string, direct: boolean): string => {
 		let blocks: string[] = bits64.match(/.{1,32}/g) || [];
 		this.avalanche.push(bits64);
 
 		for (let i = direct ? 1 : 16;
 			direct ? i <= 16 : i >= 1;
 			i += direct ? 1 : -1) {
-			blocks = this._iterateBlocks(blocks, i);
+			blocks = this.iterateBlocks(blocks, i);
 			this.avalanche.push(blocks.join(''));
 		}
 
@@ -93,7 +93,7 @@ export class FeistelsNetwork {
 		this.avalanche = [];
 		return (('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
 			.match(/.{1,64}/g) || [])
-			.map((block: string): string => this._encryptBlock(block, direct))
+			.map((block: string): string => this.encryptBlock(block, direct))
 			.join('');
 	}
 }
