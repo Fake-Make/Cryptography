@@ -60,24 +60,7 @@ export class Work2Component implements OnInit {
     this.cipher = this.fromBin('cipher', binCipher);
   }
 
-  private getBin(key: 'base' | 'gamma' | 'cipher'): string {
-    const from = this[key];
-    return [
-      Converter.strToBin.bind(Converter),
-      (from: string) => from,
-      Converter.hexToBin.bind(Converter)
-    ][this.views[key]](from);
-  }
-
-  private fromBin(key: 'base' | 'gamma' | 'cipher', bin: string): string {
-    return [
-      Converter.binToStr.bind(Converter),
-      (bin: string) => bin,
-      Converter.binToHex.bind(Converter)
-    ][this.views[key]](bin);
-  }
-
-  /*private*/ updatePlots(): void {
+  updatePlots(): void {
     // Avalances A
     let binGamma = this.getBin('gamma');
     let binBase = this.getBin('base');
@@ -111,5 +94,22 @@ export class Work2Component implements OnInit {
       .map(vfCase => 
         Avalanche.getDifferences(avalanchesA[vfCase], avalanchesB[vfCase]))
       .map((data, vfCase) => ({data: data, label: LABELS[vfCase]}));
+  }
+
+  private getBin(key: 'base' | 'gamma' | 'cipher'): string {
+    const from = this[key];
+    return [
+      Converter.strToBin.bind(Converter),
+      (from: string) => from,
+      Converter.hexToBin.bind(Converter)
+    ][this.views[key]](from);
+  }
+
+  private fromBin(key: 'base' | 'gamma' | 'cipher', bin: string): string {
+    return [
+      Converter.binToStr.bind(Converter),
+      (bin: string) => bin,
+      Converter.binToHex.bind(Converter)
+    ][this.views[key]](bin);
   }
 }
