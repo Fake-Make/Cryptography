@@ -4,6 +4,7 @@ export class DES {
 	protected key: string = '';
 	protected subkeys: string[] = [];
 	protected avalanche: string[] = [];
+	protected avalanchePcbc: string[][] = [];
 
 	constructor(key: string) {
 		this.key = key;
@@ -227,6 +228,14 @@ export class DES {
 		return resCipher;
 	}
 
+	protected E(bits64: string): string {
+		return this.encryptBlock(bits64, true);
+	}
+
+	protected D(bits64: string): string {
+		return this.encryptBlock(bits64, false);
+	}
+
 	apply(bits: string, direct = true): string {
 		this.avalanche = [];
 		return (('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
@@ -235,5 +244,49 @@ export class DES {
 			.join('');
 	}
 
+	protected pcbcEncrypt(bits: string, IVc: string, IVp: string): string {
+		let blocks = ('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
+			.match(/.{1,64}/g) || [];
+		const P = [IVp, ...blocks];
+		const C = [IVc];
+
+		for (let i = 1; i < P.length; i++) {
+			const toCipher = Gamma.apply(Gamma.apply(P[i], C[i - 1]), P[i - 1]);
+			C[i] = this.E(toCipher);
+			this.avalanchePcbc.push(this.avalanche);
+			this.avalanche = [];
+		}
+
+		return C.join('');
+	}
+
+	protected pcbcDecrypt(bits: string, IVp: string): string {
+		let blocks = ('0'.repeat(bits.length % 64 ? 64 - bits.length % 64 : 0) + bits)
+			.match(/.{1,64}/g) || [];
+		const P = [...blocks];
+		const C = [IVp];
+
+		for (let i = 1; i < P.length; i++) {
+			C[i] = Gamma.apply(
+				this.D(P[i]),
+				Gamma.apply(C[i - 1], P[i - 1])
+			);
+			this.avalanchePcbc.push(this.avalanche);
+			this.avalanche = [];
+		}
+
+		return C.slice(1).join('');
+	}
+
+	pcbc(bits: string, IVc: string, IVp: string, direct = true): string {
+		this.avalanche = [];
+		this.avalanchePcbc = [];
+
+		return direct ?
+			this.pcbcEncrypt(bits, IVc, IVp) :
+			this.pcbcDecrypt(bits, IVp);
+	}
+
 	getAvalanche = (): string[] => this.avalanche;
+	getAvalanchePcbc = (): string[][] => this.avalanchePcbc;
 }
