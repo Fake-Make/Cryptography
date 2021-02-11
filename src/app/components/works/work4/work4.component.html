@@ -1,1 +1,171 @@
-<p>work4 works!</p>
+<h1 class="mat-header">ПСЗИ — Лабораторная работа #4</h1>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	DES (PCBC)
+	<mat-slide-toggle
+        color="primary"
+        [(ngModel)]="checkedEde">
+        DES (EDE)
+    </mat-slide-toggle>
+</h2>
+<div class="wrapper">
+	<div *ngIf="checkedEde" class="wrapper">
+		<section>
+			<button (click)="changeView('key1')" mat-stroked-button color="accent">
+				{{ viewModes[views.key1] }}
+			</button>
+			<button (click)="key1 = getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+				Случайная
+			</button>
+			<button (click)="key1 = getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+				Скремблер
+			</button>
+			<br><br>
+			<mat-form-field class="w-270">
+				<mat-label>Ключ 1</mat-label>
+				<textarea matInput cols="40" rows="9"
+					class="mono" [(ngModel)]="key1"></textarea>
+			</mat-form-field>
+		</section>
+
+		<section>
+			<button (click)="changeView('key1')" mat-stroked-button color="accent">
+				{{ viewModes[views.key2] }}
+			</button>
+			<button (click)="key2 = getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+				Случайная
+			</button>
+			<button (click)="key2 = getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+				Скремблер
+			</button>
+			<br><br>
+			<mat-form-field class="w-270">
+				<mat-label>Ключ 2</mat-label>
+				<textarea matInput cols="40" rows="9"
+					class="mono" [(ngModel)]="key2"></textarea>
+			</mat-form-field>
+		</section>
+	</div>
+
+	<div *ngIf="!checkedEde" class="wrapper">
+		<section>
+			<button (click)="changeView('key1')" mat-stroked-button color="accent">
+				{{ viewModes[views.key1] }}
+			</button>
+			<button (click)="key1 = getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+				Случайная
+			</button>
+			<button (click)="key1 = getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+				Скремблер
+			</button>
+			<br><br>
+			<mat-form-field class="w-270">
+				<mat-label>Ключ</mat-label>
+				<textarea matInput cols="40" rows="9"
+					class="mono" [(ngModel)]="key1"></textarea>
+			</mat-form-field>
+		</section>
+
+		<section>
+			<button (click)="changeView('IVp')" mat-stroked-button color="accent">
+				{{ viewModes[views.IVp] }}
+			</button>
+			<button (click)="IVp = getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+				Случайная
+			</button>
+			<button (click)="IVp = getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+				Скремблер
+			</button>
+			<br><br>
+			<mat-form-field class="w-270">
+				<mat-label>Вектор инициализации (IVp)</mat-label>
+				<textarea matInput cols="40" rows="9"
+					class="mono" [(ngModel)]="IVp"></textarea>
+			</mat-form-field>
+		</section>
+
+		<section>
+			<button (click)="changeView('IVc')" mat-stroked-button color="accent">
+				{{ viewModes[views.IVc] }}
+			</button>
+			<button (click)="IVc = getGamma('random')" mat-stroked-button color="primary" class="ml-20">
+				Случайная
+			</button>
+			<button (click)="IVc = getGamma('scrambler')" mat-stroked-button color="primary" class="ml-20">
+				Скремблер
+			</button>
+			<br><br>
+			<mat-form-field class="w-270">
+				<mat-label>Вектор инициализации (IVc)</mat-label>
+				<textarea matInput cols="40" rows="9"
+					class="mono" [(ngModel)]="IVc"></textarea>
+			</mat-form-field>
+		</section>
+	</div>
+
+	<section>
+		<button (click)="changeView('base')" mat-stroked-button color="accent">
+			{{ viewModes[views.base] }}
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Текст для шифрования</mat-label>
+			<textarea matInput placeholder="Hello World!" cols="40" rows="9"
+				class="mono" [(ngModel)]="base"></textarea>
+		</mat-form-field>
+	</section>
+
+	<section>
+		<button (click)="changeView('cipher')" mat-stroked-button color="accent">
+			{{ viewModes[views.cipher] }}
+		</button>
+		<button (click)="applyCipher('direct')" mat-stroked-button color="primary" class="ml-20">
+			Шифровать
+		</button>
+		<button (click)="applyCipher('reverse')" mat-stroked-button color="primary" class="ml-20">
+			Дешифровать
+		</button>
+		<br><br>
+		<mat-form-field class="w-270">
+			<mat-label>Шифрованный текст</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="cipher"></textarea>
+		</mat-form-field>
+	</section>
+</div>
+<mat-divider></mat-divider>
+
+<h2>Лавинный эффект</h2>
+<mat-form-field appearance="fill" class="w-270">
+	<mat-label>Цель изменений</mat-label>
+	<mat-select [(ngModel)]="target">
+		<mat-option value="base">Исходный текст</mat-option>
+		<mat-option value="key1" *ngIf="!checkedEde">Ключ</mat-option>
+		<mat-option value="key1" *ngIf="checkedEde">Ключ 1</mat-option>
+		<mat-option value="key2" *ngIf="checkedEde">Ключ 2</mat-option>
+		<mat-option value="IVp" *ngIf="!checkedEde">Вектор инициализации IVp</mat-option>
+		<mat-option value="IVc" *ngIf="!checkedEde">Вектор инициализации IVc</mat-option>
+	</mat-select>
+</mat-form-field>
+<br>
+<mat-form-field>
+    <mat-label>Номер изменяемого бита</mat-label>
+    <input type="number" min="1" [max]="target === 'base' ? getBin('base').length : 64" matInput [(ngModel)]="targetBit">
+</mat-form-field>
+<br>
+<button (click)="updatePlots()" mat-stroked-button color="primary"
+	[disabled]="checkedEde ?
+		[base, key1, key2].includes('') :
+		[base, key1, IVp, IVc].includes('')">
+	Построить график
+</button>
+
+<div style="display: block; width: 100%"
+	*ngIf="lineChartData[0].data.length !== 1">
+	<canvas baseChart
+		[datasets]="lineChartData"
+		[labels]="lineChartLabels"
+		chartType="line">
+	</canvas>
+</div>
