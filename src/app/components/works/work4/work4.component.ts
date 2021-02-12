@@ -2,6 +2,7 @@ import { Converter } from '@core/converter';
 import { Gamma } from '@core/gamma';
 import { Avalanche } from '@core/avalanche';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnInit } from '@angular/core';
 import { Label } from 'ng2-charts';
 import { DES } from '@/app/core/des';
@@ -35,6 +36,8 @@ export class Work4Component implements OnInit {
   ];
   lineChartLabels: Label[] = ['0'];
 
+  constructor(private _snackBar: MatSnackBar) {}
+
   ngOnInit() {
     this.setLabels(16);
   }
@@ -65,23 +68,31 @@ export class Work4Component implements OnInit {
     const binIVc = this.getBin('IVc');
     let binCipher = '';
 
+    let t0;
     if (this.checkedEde) {
       const ede = new EDE(binKey1, binKey2);
+      t0 = performance.now();
       binCipher = ede.apply(binBase, direction === 'direct');
     } else {
       const des = new DES(binKey1);
+      t0 = performance.now();
       binCipher = des.pcbc(binBase, binIVc, binIVp, direction === 'direct');
     }
 
+    this.checkTime(t0);
     this.cipher = this.fromBin('cipher', binCipher);
   }
 
   updatePlots(): void {
+    const t0 = performance.now();
+
     if (this.checkedEde) {
       this.updatePlotEde();
     } else {
       this.updatePlotPcbc();
     }
+
+    this.checkTime(t0);
   }
 
   getBin(key: Convertable): string {
@@ -91,6 +102,14 @@ export class Work4Component implements OnInit {
       (from: string) => from,
       Converter.hexToBin.bind(Converter)
     ][this.views[key]](from);
+  }
+
+  protected checkTime(initialTime: number) {
+    const executionTime = (performance.now() - initialTime).toFixed(2);
+    const message = `Время выполнения: ${executionTime} мс.`;
+    this._snackBar.open(message, '', {
+      duration: 5000,
+    });
   }
 
   protected updatePlotEde(): void {
