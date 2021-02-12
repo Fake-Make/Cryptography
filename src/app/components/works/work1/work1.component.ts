@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Converter } from '@core/converter';
 import { Gamma } from '@core/gamma';
@@ -28,6 +28,8 @@ export class Work1Component implements OnInit {
   period: number = 0;
 
   tests = {chi2: '', balance: '', cyclicity: '', correlation: ''};
+
+  constructor(private _snackBar: MatSnackBar) {}
 
   ngOnInit(): void { }
 
@@ -63,12 +65,24 @@ export class Work1Component implements OnInit {
   applyCipher(): void {
     const binBase = this.getBin('base');
     const binGamma = this.getBin('gamma');
+
+    const t0 = performance.now();
     const binCipher = Gamma.apply(binBase, binGamma);
+    this.checkTime(t0);
 
     this.cipher = this.fromBin('cipher', binCipher);
   }
 
-  private applyTests():void {
+  protected checkTime(initialTime: number) {
+    const executionTime = (performance.now() - initialTime).toFixed(2);
+    const message = `Время выполнения: ${executionTime} мс.`;
+    this._snackBar.open(message, '', {
+      duration: 5000,
+    });
+  }
+
+  private applyTests(): void {
+    const t0 = performance.now();
     const set = this.getBin('gamma');
 
     const chi2 = Statistics.chiSquaredTest(set);
@@ -97,6 +111,7 @@ export class Work1Component implements OnInit {
       `разница: ${(range.difference_percent * 100).toFixed(0)}%, тест ${range.testSucceed ? 'пройден' : 'не пройден'}.`)
       .join('\n');
     this.tests.correlation += `\nТест ${correlation.testSucceed ? 'пройден' : 'не пройден'}.`;
+    this.checkTime(t0);
   }
 
   private getBin(key: 'base' | 'gamma' | 'cipher'): string {

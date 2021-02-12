@@ -2,6 +2,7 @@ import { Converter } from '@core/converter';
 import { Gamma } from '@core/gamma';
 import { Avalanche } from '@core/avalanche';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnInit } from '@angular/core';
 import { Label } from 'ng2-charts';
 import { GOST } from '@/app/core/gost';
@@ -31,6 +32,8 @@ export class Work3Component implements OnInit {
   ];
   lineChartLabels: Label[] = ['0'];
 
+  constructor(private _snackBar: MatSnackBar) {}
+
   ngOnInit() {
     this.setLabels(this.checkedGost ? 32 : 16);
   }
@@ -59,11 +62,16 @@ export class Work3Component implements OnInit {
     const binGamma = this.getBin('gamma');
 
     const cipher = this.checkedGost ? new GOST(binGamma) : new DES(binGamma);
+
+    const t0 = performance.now();
     const binCipher = cipher.apply(binBase, direction === 'direct');
+    this.checkTime(t0);
+
     this.cipher = this.fromBin('cipher', binCipher);
   }
 
   updatePlots(): void {
+    const t0 = performance.now();
     // Avalances A
     let binGamma = this.getBin('gamma');
     let binBase = this.getBin('base');
@@ -84,6 +92,7 @@ export class Work3Component implements OnInit {
     const cipherB = this.checkedGost ? new GOST(binGamma) : new DES(binGamma);
     cipherB.apply(binBase);
     const avalanchesB = cipherB.getAvalanche();
+    this.checkTime(t0);
 
     // Plots
     this.setLabels(this.checkedGost ? 32 : 16);
@@ -103,12 +112,23 @@ export class Work3Component implements OnInit {
       return alg.apply(binBase);
     };
 
+    const t0 = performance.now();
     const researches = Avalanche.getCriterias(binBase, binGamma, cipher, 'key');
+    this.checkTime(t0);
+
     this.researches = `Среднее число битов выхода, изменяющихся ` +
       `при изменении одного бита входного вектора: ${Math.round(researches.averageBits)};\n` +
       `Степень полноты преобразования: ${(100 * researches.conversionCompleteness).toFixed(2)}%;\n` +
       `Степень лавинного эффекта: ${(100 * researches.avalancheDegree).toFixed(2)}%;\n` + 
       `Степень соответствия строгому лавинному критерию: ${(100 * researches.strictAvalancheDegree).toFixed(2)}%.`;
+  }
+
+  protected checkTime(initialTime: number) {
+    const executionTime = (performance.now() - initialTime).toFixed(2);
+    const message = `Время выполнения: ${executionTime} мс.`;
+    this._snackBar.open(message, '', {
+      duration: 5000,
+    });
   }
 
   private setLabels(iterations: 16 | 32 = 16) {

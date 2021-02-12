@@ -3,6 +3,7 @@ import { Gamma } from '@core/gamma';
 import { FeistelsNetwork } from '@core/feistels_network';
 import { Avalanche } from '@core/avalanche';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Component, OnInit } from '@angular/core';
 import { Label } from 'ng2-charts';
 
@@ -27,6 +28,8 @@ export class Work2Component implements OnInit {
     {data: [0], label: 'Количество изменённых бит'},
   ];
   lineChartLabels: Label[] = ['0'];
+
+  constructor(private _snackBar: MatSnackBar) {}
 
   ngOnInit() {
     this.lineChartLabels = ['Начало', ...'0'.repeat(16).split('')
@@ -56,11 +59,16 @@ export class Work2Component implements OnInit {
     const binGamma = this.getBin('gamma');
 
     const feistel = new FeistelsNetwork(binGamma, +this.vfCase);
+
+    const t0 = performance.now();
     const binCipher = feistel.apply(binBase, direction === 'direct');
+    this.checkTime(t0);
+
     this.cipher = this.fromBin('cipher', binCipher);
   }
 
   updatePlots(): void {
+    const t0 = performance.now();
     // Avalances A
     let binGamma = this.getBin('gamma');
     let binBase = this.getBin('base');
@@ -94,6 +102,15 @@ export class Work2Component implements OnInit {
       .map(vfCase => 
         Avalanche.getDifferences(avalanchesA[vfCase], avalanchesB[vfCase]))
       .map((data, vfCase) => ({data: data, label: LABELS[vfCase]}));
+    this.checkTime(t0);
+  }
+
+  protected checkTime(initialTime: number) {
+    const executionTime = (performance.now() - initialTime).toFixed(2);
+    const message = `Время выполнения: ${executionTime} мс.`;
+    this._snackBar.open(message, '', {
+      duration: 5000,
+    });
   }
 
   private getBin(key: 'base' | 'gamma' | 'cipher'): string {
