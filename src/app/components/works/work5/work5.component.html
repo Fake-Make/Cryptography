@@ -1,1 +1,131 @@
-<p>work5 works!</p>
+<h1 class="mat-header">ПСЗИ — Лабораторная работа #5</h1>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	Генерация простых чисел
+</h2>
+<div class="wrapper">
+	<div class="wrapper">
+		<section>
+			<label>Количество бит для генерации</label>
+			<br>
+			64 <mat-slider min="64" max="128" step="1" thumbLabel="true"
+				[(ngModel)]="randomNumberBits">
+			</mat-slider> 128
+			<br>
+			<label>Количество итераций теста Рабина-Миллера</label>
+			<br>
+			5 <mat-slider min="5" max="15" step="1" thumbLabel="true"
+				[(ngModel)]="millerRabinRepeatitions">
+			</mat-slider> 15
+			<br>
+		</section>
+		<section>
+			<mat-form-field class="w-330">
+				<mat-label>Простое число</mat-label>
+				<input type="number" matInput [(ngModel)]="primalNumber1">
+			</mat-form-field>
+			<br>
+			<button (click)="primalNumber1 = getPrimalNumber()" mat-stroked-button color="primary">
+				Сгенерировать число
+			</button>
+		</section>
+	</div>
+	<section width="100%">
+		<br>
+		<button (click)="getPrimalRoots()" mat-stroked-button color="primary">
+			Получить первообразные корни
+		</button>
+		<br><br>
+		<pre class="mono">{{ primalRoots }}</pre>
+	</section>
+</div>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	Определение первообразных корней
+</h2>
+<div class="wrapper">
+	<section width="90%">
+		<mat-form-field class="w-330">
+			<mat-label>Начало диапазона</mat-label>
+			<input type="text" pattern="[0-9]+" matInput [(ngModel)]="rangeMin">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>Конец диапазона</mat-label>
+			<input type="text" pattern="[0-9]+" matInput [(ngModel)]="rangeMax">
+		</mat-form-field>
+		<br><br>
+		<button (click)="getPrimalNumbers()" mat-stroked-button color="primary">
+			Найти простые числа
+		</button>
+		<br><br>
+		<mat-accordion *ngIf="primalNumbers !== ''">
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Простые числа</mat-panel-title>
+				</mat-expansion-panel-header>
+				<pre class="mono">{{ primalNumbers }}</pre>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</section>
+</div>
+<br>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	Схема Диффи-Хеллмана
+</h2>
+<div class="wrapper">
+	<section>
+		<button (click)="prepareDeffieHellman()" mat-stroked-button color="primary">
+			Сгенерировать данные
+		</button>
+		<br><br>
+		<mat-form-field class="w-330">
+			<mat-label>n</mat-label>
+			<input type="number" min="1" step="1" max="1e38" matInput [(ngModel)]="n">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>g</mat-label>
+			<input readonly type="number" matInput [(ngModel)]="g">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>XA</mat-label>
+			<input type="number" min="1" step="1" max="1e38" matInput [(ngModel)]="XA">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>XB</mat-label>
+			<input type="number" min="1" step="1" max="1e38" matInput [(ngModel)]="XB">
+		</mat-form-field>
+	</section>
+	<section>
+		<button (click)="launchDeffieHellman()" mat-stroked-button color="primary">
+			Запустить
+		</button>
+		<br><br>
+		<mat-form-field class="w-330">
+			<mat-label>YA</mat-label>
+			<input readonly type="number" matInput [(ngModel)]="YA">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>YB</mat-label>
+			<input readonly type="number" matInput [(ngModel)]="YB">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>KA</mat-label>
+			<input readonly type="number" matInput [(ngModel)]="KA">
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-330">
+			<mat-label>KB</mat-label>
+			<input readonly type="number" matInput [(ngModel)]="KB">
+		</mat-form-field>
+	</section>
+</div>
