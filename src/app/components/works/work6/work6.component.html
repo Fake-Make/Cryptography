@@ -1,1 +1,116 @@
-<p>work6 works!</p>
+<h1 class="mat-header">ПСЗИ — Лабораторная работа #6</h1>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	Генерация RSA-ключей
+</h2>
+<div class="wrapper">
+	<section>
+		<label>Количество бит для генерации</label>
+		<br>
+		128 <mat-slider min="128" max="480" step="1" thumbLabel="true"
+			[(ngModel)]="bits">
+		</mat-slider> 480
+		<br>
+		<button (click)="generateRsa()" mat-stroked-button color="primary">
+			Создать ключи
+		</button>
+		<br>
+	</section>
+	<section class="fg-1">
+		<mat-form-field class="w-100">
+			<mat-label>Часть открытого ключа E</mat-label>
+			<textarea matInput cols="38" rows="4" class="mono"
+				[(ngModel)]="keysRsa.e"></textarea>
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-100">
+			<mat-label>Часть открытого ключа D</mat-label>
+			<textarea matInput cols="38" rows="4" class="mono"
+				[(ngModel)]="keysRsa.d"></textarea>
+		</mat-form-field>
+		<br>
+		<mat-form-field class="w-100">
+			<mat-label>Общая часть N</mat-label>
+			<textarea matInput cols="38" rows="4" class="mono"
+				[(ngModel)]="keysRsa.n"></textarea>
+		</mat-form-field>
+	</section>
+</div>
+<br>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	RSA шифрование
+</h2>
+<div class="wrapper">
+	<section class="fg-1">
+		<mat-form-field class="w-100">
+			<mat-label>Ключ для шифрования DES</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="keyDes"></textarea>
+		</mat-form-field>
+		<br>
+		<button (click)="generateDes()" mat-stroked-button color="primary">
+			Сгенерировать
+		</button>
+	</section>
+	<section class="fg-1">
+		<mat-form-field class="w-100">
+			<mat-label>Шифрованный ключ DES</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="keyDesEncrypted"></textarea>
+		</mat-form-field>
+		<br>
+		<button (click)="keyDesEncrypted = encryptRsa(keyDes)" mat-stroked-button color="primary">
+			Шифровать
+		</button>
+	</section>
+	<section class="fg-1">
+		<mat-form-field class="w-100">
+			<mat-label>Дешифрованный ключ DES</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="keyDesDecrypted"></textarea>
+		</mat-form-field>
+		<br>
+		<button (click)="keyDesDecrypted = decryptRsa(keyDesEncrypted)" mat-stroked-button color="primary">
+			Дешифровать
+		</button>
+	</section>
+</div>
+<br>
+<mat-divider></mat-divider>
+
+<h2 class="mat-title">
+	DES шифрование
+</h2>
+<div class="wrapper">
+	<section class="fg-1">
+		<button (click)="changeView('base')" mat-stroked-button color="accent">
+			{{ viewModes[views.base] }}
+		</button>
+		<br><br>
+		<mat-form-field class="w-100">
+			<mat-label>Текст для шифрования</mat-label>
+			<textarea matInput placeholder="Hello World!" cols="40" rows="9"
+				class="mono" [(ngModel)]="base"></textarea>
+		</mat-form-field>
+	</section>
+	<section class="fg-1">
+		<button (click)="changeView('cipher')" mat-stroked-button color="accent">
+			{{ viewModes[views.cipher] }}
+		</button>
+		<button (click)="encryptDes()" mat-stroked-button color="primary" class="ml-20">
+			Шифровать
+		</button>
+		<button (click)="decryptDes()" mat-stroked-button color="primary" class="ml-20">
+			Дешифровать
+		</button>
+		<br><br>
+		<mat-form-field class="w-100">
+			<mat-label>Результат работы DES</mat-label>
+			<textarea matInput cols="40" rows="9"
+				class="mono" [(ngModel)]="cipher"></textarea>
+		</mat-form-field>
+	</section>
+</div>
