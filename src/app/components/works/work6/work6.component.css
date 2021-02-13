@@ -1,0 +1,33 @@
+.mono {
+	font-family: 'Courier New', Courier, monospace;
+	width: 100%;
+	white-space: pre-wrap;
+    white-space: -moz-pre-wrap;
+    white-space: -pre-wrap;
+    white-space: -o-pre-wrap;
+    word-wrap: break-word;
+}
+
+.ml-20 {
+	margin-left: 20px;
+}
+
+.wrapper {
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.fg-1 {
+	flex-grow: 1;
+}
+
+* + .fg-1 {
+	margin-left: 50px;
+}
+
+.w-100 {
+	width: 100%;
+}
