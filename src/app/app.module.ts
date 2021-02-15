@@ -17,6 +17,7 @@ import { Work4Component } from '@works/4/work4.component';
 import { Work5Component } from '@works/5/work5.component';
 import { Work6Component } from '@works/6/work6.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ModalBusyComponent } from './components/modal-busy/modal-busy.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     Work3Component,
     Work4Component,
     Work5Component,
-    Work6Component
+    Work6Component,
+    ModalBusyComponent
   ],
   imports: [
     BrowserModule,
