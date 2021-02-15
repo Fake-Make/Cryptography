@@ -1,3 +1,4 @@
+import { BusyService } from '@/app/services/busy/busy.service';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -30,7 +31,10 @@ export class Work5Component implements OnInit {
   KA: bigint = 0n;
   KB: bigint = 0n;
 
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    public busyService: BusyService
+  ) {}
 
   ngOnInit(): void {
     const PRIMALS = [0, 1, 2].map(() => Primals.getPrimalNumber(this.randomNumberBits)).sort();
@@ -58,9 +62,11 @@ export class Work5Component implements OnInit {
     }
 
     const t0 = performance.now();
-    const roots = Primals.getPrimalRoot(this.primalNumber1);
-    this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
-    this.primalRoots = roots.join(', ') + '.';
+    this.busyService.delayed(() => {
+      const roots = Primals.getPrimalRoot(this.primalNumber1);
+      this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
+      this.primalRoots = roots.join(', ') + '.';
+    });
   }
 
   getPrimalNumbers() {
@@ -80,39 +86,45 @@ export class Work5Component implements OnInit {
     const start = min % 2n === 1n ? min : min + 1n;
 
     const t0 = performance.now();
-    for (let i = start; i <= max; i += 2n) {
-      if (Primals.millerRabinTest(i))
-        primals.push(i);
-    }
-    const time = (performance.now() - t0).toFixed(2);
-    this.popup(`Выполнение заняло ${time} мс.`);
-
-    this.primalNumbers = primals.join(', ') + `.\nВремя выполнения: ${time} мс.`;
+    this.busyService.delayed(() => {
+      for (let i = start; i <= max; i += 2n) {
+        if (Primals.millerRabinTest(i))
+          primals.push(i);
+      }
+      const time = (performance.now() - t0).toFixed(2);
+      this.popup(`Выполнение заняло ${time} мс.`);
+  
+      this.primalNumbers = primals.join(', ') + `.\nВремя выполнения: ${time} мс.`;
+    });
   }
 
   prepareDeffieHellman() {
     this.dataToBigint();
     const t0 = performance.now();
-    const PRIMALS = [0, 1, 2].map(() => Primals.getPrimalNumber(this.randomNumberBits)).sort();
-    this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
+    this.busyService.delayed(() => {
+      const PRIMALS = [0, 1, 2].map(() => Primals.getPrimalNumber(this.randomNumberBits)).sort();
+      this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
 
-    this.n = PRIMALS[2];
-    this.g = Primals.getPrimalRoot(this.n)[0];
-    this.XA = PRIMALS[1];
-    this.XB = PRIMALS[0];
+      this.n = PRIMALS[2];
+      this.g = Primals.getPrimalRoot(this.n)[0];
+      this.XA = PRIMALS[1];
+      this.XB = PRIMALS[0];
+    });
   }
 
   launchDeffieHellman() {
     this.dataToBigint();
     const t0 = performance.now();
 
-    this.g = Primals.getPrimalRoot(this.n)[0];
-    this.YA = Primals.powToMod(this.g, this.XA, this.n);
-    this.YB = Primals.powToMod(this.g, this.XB, this.n);
-    this.KA = Primals.powToMod(this.YB, this.XA, this.n);
-    this.KB = Primals.powToMod(this.YA, this.XB, this.n);
+    this.busyService.delayed(() => {
+      this.g = Primals.getPrimalRoot(this.n)[0];
+      this.YA = Primals.powToMod(this.g, this.XA, this.n);
+      this.YB = Primals.powToMod(this.g, this.XB, this.n);
+      this.KA = Primals.powToMod(this.YB, this.XA, this.n);
+      this.KB = Primals.powToMod(this.YA, this.XB, this.n);
 
-    this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
+      this.popup(`Выполнение заняло ${(performance.now() - t0).toFixed(2)} мс.`);
+    });
   }
 
   protected dataToBigint() {

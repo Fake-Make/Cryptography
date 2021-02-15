@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { Label } from 'ng2-charts';
 import { GOST } from '@/app/core/gost';
 import { DES } from '@/app/core/des';
+import { BusyService } from '@/app/services/busy/busy.service';
 
 @Component({
   selector: 'app-work3',
@@ -32,7 +33,10 @@ export class Work3Component implements OnInit {
   ];
   lineChartLabels: Label[] = ['0'];
 
-  constructor(private _snackBar: MatSnackBar) {}
+  constructor(
+    private _snackBar: MatSnackBar,
+    public busyService: BusyService
+  ) {}
 
   ngOnInit() {
     this.setLabels(this.checkedGost ? 32 : 16);
@@ -113,14 +117,16 @@ export class Work3Component implements OnInit {
     };
 
     const t0 = performance.now();
-    const researches = Avalanche.getCriterias(binBase, binGamma, cipher, 'key');
-    this.checkTime(t0);
-
-    this.researches = `Среднее число битов выхода, изменяющихся ` +
-      `при изменении одного бита входного вектора: ${Math.round(researches.averageBits)};\n` +
-      `Степень полноты преобразования: ${(100 * researches.conversionCompleteness).toFixed(2)}%;\n` +
-      `Степень лавинного эффекта: ${(100 * researches.avalancheDegree).toFixed(2)}%;\n` + 
-      `Степень соответствия строгому лавинному критерию: ${(100 * researches.strictAvalancheDegree).toFixed(2)}%.`;
+    this.busyService.delayed(() => {
+      const researches = Avalanche.getCriterias(binBase, binGamma, cipher, 'key');
+      this.checkTime(t0);
+  
+      this.researches = `Среднее число битов выхода, изменяющихся ` +
+        `при изменении одного бита входного вектора: ${Math.round(researches.averageBits)};\n` +
+        `Степень полноты преобразования: ${(100 * researches.conversionCompleteness).toFixed(2)}%;\n` +
+        `Степень лавинного эффекта: ${(100 * researches.avalancheDegree).toFixed(2)}%;\n` + 
+        `Степень соответствия строгому лавинному критерию: ${(100 * researches.strictAvalancheDegree).toFixed(2)}%.`;
+    });
   }
 
   protected checkTime(initialTime: number) {
