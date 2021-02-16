@@ -1,32 +1,94 @@
 <h1 class="mat-headline">Программные средства защиты информации</h1>
 <mat-divider></mat-divider>
 
-<h2 class="mat-title">Бригада #3</h2>
-<mat-card class="example-card">
-	<mat-card-header>
-		<div mat-card-avatar class="header-image-dmitry"></div>
-		<mat-card-title>Вегнер Дмитрий</mat-card-title>
-		<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
-	</mat-card-header>
-</mat-card>
-<mat-card class="example-card">
-	<mat-card-header>
-		<div mat-card-avatar class="header-image-michael"></div>
-		<mat-card-title>Долгушин Михаил</mat-card-title>
-		<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
-	</mat-card-header>
-</mat-card>
+<div class="wrapper">
+	<section>
+		<h2 class="mat-title">Бригада #3</h2>
+		<mat-card class="example-card">
+			<mat-card-header>
+				<div mat-card-avatar class="header-image-dmitry"></div>
+				<mat-card-title>Вегнер Дмитрий</mat-card-title>
+				<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
+			</mat-card-header>
+		</mat-card>
+		<mat-card class="example-card">
+			<mat-card-header>
+				<div mat-card-avatar class="header-image-michael"></div>
+				<mat-card-title>Долгушин Михаил</mat-card-title>
+				<mat-card-subtitle>ПМИМ—91</mat-card-subtitle>
+			</mat-card-header>
+		</mat-card>
+	</section>
+	<section class="mw-250">
+		<h2 class="mat-title">Ссылки</h2>
+		<a mat-stroked-button href="https://github.com/Fake-Make/Cryptography" target="_blank">GitHub</a>
+		<a style="margin-left:20px" mat-stroked-button href="https://trello.com/b/VxXY1Ql1/" target="_blank">Trello</a>
+	</section>
+</div>
 <mat-divider></mat-divider>
-
-<h2 class="mat-title">Отчёты</h2>
-<mat-list>
-	<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]" matRipple
-		(click)="downloadWork(work)">
-			Отчёт по работе #{{ work }}
-	</mat-list-item>
-</mat-list>
-<mat-divider></mat-divider>
-
-<h2 class="mat-title">Ссылки</h2>
-<a mat-stroked-button href="https://github.com/Fake-Make/Cryptography" target="_blank">GitHub</a>
-<a style="margin-left:20px" mat-stroked-button href="https://trello.com/b/VxXY1Ql1/" target="_blank">Trello</a>
+<br>
+<div class="wrapper">
+	<section>
+		<h2 class="mat-title">Инструкции</h2>
+		<br>
+		<mat-accordion>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #1</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/kPOnXeOjl0E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #2</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/1-Qd2LZyWh0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #3</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/uL_XRNVZk_s" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #4</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/a9mU3U9g1Mo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #5</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/sLyngb8lN_Q" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+			<mat-expansion-panel hideToggle>
+				<mat-expansion-panel-header>
+					<mat-panel-title>Лабораторная работа #6</mat-panel-title>
+				</mat-expansion-panel-header>
+				<div class="w-100">
+					<iframe width="560" height="315" src="https://www.youtube.com/embed/KhBtg7zBANI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</div>
+			</mat-expansion-panel>
+		</mat-accordion>
+	</section>
+	<section>
+		<h2 class="mat-title">Отчёты</h2>
+		<mat-list>
+			<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]" matRipple
+				(click)="downloadWork(work)">
+					Отчёт по работе #{{ work }}
+			</mat-list-item>
+		</mat-list>
+	</section>
+</div>
