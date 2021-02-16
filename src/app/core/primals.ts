@@ -71,8 +71,9 @@ export class Primals {
 			fact.unshift(n);
 		for (let res = 2n; res <= p && g.length < 100; ++res) {
 			let ok = true;
-			for (let i = 0; i < fact.length && ok; ++i)
-				ok == ok && this.powToMod(res, phi / fact[i], p) !== 1n;
+			for (let i = 0; i < fact.length && ok; ++i) {
+				ok = ok && this.powToMod(res, phi / fact[i], p) !== 1n;
+			}
 			if (ok) g.push(res);
 		}
 		return g;
