@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ng build --prod --base-href './' && git add docs/* -f && git commit -m 'deployment: bundles created' && npm version patch"
+    "deploy": "ng build --prod --base-href './' && git add -A && git commit -m 'deployment: bundles created'"
   },
   "private": true,
   "dependencies": {
