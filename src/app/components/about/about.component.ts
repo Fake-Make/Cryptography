@@ -6,6 +6,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
+  instructions: string[] = [
+    'https://www.youtube.com/embed/kPOnXeOjl0E',
+    'https://www.youtube.com/embed/1-Qd2LZyWh0',
+    'https://www.youtube.com/embed/uL_XRNVZk_s',
+    'https://www.youtube.com/embed/a9mU3U9g1Mo',
+    'https://www.youtube.com/embed/sLyngb8lN_Q',
+    'https://www.youtube.com/embed/KhBtg7zBANI'
+  ];
+
   ngOnInit(): void { }
 
   downloadWork(work: number): void {
