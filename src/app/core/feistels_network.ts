@@ -27,7 +27,7 @@ export class FeistelsNetwork {
 	// этим скремблером последовательность из 32-х бит;
 	private getSubkeyB = (i: number): string => {
 		let key = this.key;
-		i = key.length - i;
+		i = key.length + 1 - i;
 		const initState = key.slice(i - 8, i);
 		const polynom = '00000011';
 		return Gamma.getScramblerGamma(32, polynom, initState).gamma;
