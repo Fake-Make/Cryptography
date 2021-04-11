@@ -84,7 +84,7 @@
 <br>
 <mat-form-field>
     <mat-label>Номер изменяемого бита</mat-label>
-    <input type="number" min="1" max="64" matInput [value]="targetBit">
+    <input type="number" min="1" max="64" matInput [(ngModel)]="targetBit">
 </mat-form-field>
 <br>
 <button (click)="updatePlots()" mat-stroked-button color="primary"
