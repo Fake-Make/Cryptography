@@ -48,10 +48,11 @@ export class Work2Component implements OnInit {
   }
 
   getGamma(method: 'random' | 'scrambler' = 'random'): void {
-    this.gamma = {
+    const binGamma = {
       random: Gamma.getSimpleGamma(32),
       scrambler: Gamma.getScramblerGamma(32).gamma
     }[method];
+    this.gamma = this.fromBin('gamma', binGamma);
   }
 
   applyFeistel(direction: 'direct' | 'reverse'): void {

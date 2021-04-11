@@ -53,11 +53,12 @@ export class Work4Component implements OnInit {
     this[key] = to;
   }
 
-  getGamma(method: 'random' | 'scrambler' = 'random'): string {
-    return {
+  getGamma(method: 'random' | 'scrambler' = 'random', viewModeSoure: Convertable): string {
+    const binGamma = {
       random: Gamma.getSimpleGamma(64),
       scrambler: Gamma.getScramblerGamma(64).gamma
     }[method];
+    return this.fromBin(viewModeSoure, binGamma);
   }
 
   applyCipher(direction: 'direct' | 'reverse' = 'direct'): void {
