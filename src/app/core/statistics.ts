@@ -48,7 +48,6 @@ export class Statistics {
 					testSucceed: DIFFERENCE_PERCENT < this.SIGNIFICANCE_LEVEL
 				}
 			});
-		sets.testSucceed = sets.every((set: {testSucceed: boolean}): boolean => set.testSucceed);
 
 		return sets;
 	}
@@ -82,7 +81,6 @@ export class Statistics {
 					testSucceed: Math.abs(EXPECTED_PERCENT - ACTUAL_PERCENT) < this.SIGNIFICANCE_LEVEL
 				}
 			});
-		series.testSucceed = Object.keys(rangeLengths).every((length: string): boolean => series[+length - 1].testSucceed);
 
 		return series;
 	}
@@ -112,8 +110,6 @@ export class Statistics {
 			testResults.push(compareSets(set, curSet));
 			curSet = cyclicShift(curSet);
 		}
-		testResults.testSucceed = testResults.every(
-			(item: {testSucceed: boolean}): boolean => item.testSucceed);
 		testResults.significanceLevel = this.SIGNIFICANCE_LEVEL;
 
 		return testResults;

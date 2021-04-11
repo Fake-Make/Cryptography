@@ -92,25 +92,31 @@ export class Work1Component implements OnInit {
       'отклоняется'}.`;
 
     const balance = Statistics.balanceTest(set);
+    const averageDifference = balance.map((range: any) => range.difference)
+      .reduce((acc: number, cur: number) => acc + cur) * 100 / balance.length;
     this.tests.balance = balance.map((range: any, index: number): string =>
         `Интервал #${index + 1} (${range.length} знаков): Разница составила ${
         (range.difference * 100).toFixed(0)}%, тест ${range.testSucceed ? 'пройден' : 'не пройден'}.`)
         .join('\n');
-    this.tests.balance += `\nТест ${balance.testSucceed ? 'пройден' : 'не пройден'}.`;
+    this.tests.balance += `\nСредняя разница составила: ${averageDifference.toFixed(0)}%.`;
 
     const cyclicity = Statistics.cyclicityTest(set);
+    const averageRepeatitions = cyclicity.map((range: any) => range.expected / range.actual)
+      .reduce((acc: number, cur: number) => acc + cur) * 100 / cyclicity.length;;
     this.tests.cyclicity = cyclicity.map((range: any, index: number): string =>
       `Циклов по ${index + 1} повторений: Ожидалось ${range.expected.toFixed(4)}, ` +
       `фактически имеется ${range.actual.toFixed(4)}, тест ${range.testSucceed ? 'пройден' : 'не пройден'}.`)
       .join('\n');
-    this.tests.cyclicity += `\nТест ${cyclicity.testSucceed ? 'пройден' : 'не пройден'}.`;
+    this.tests.cyclicity += `\nСреднее отношение ожидаемого количество повторений к фактическому: ${averageRepeatitions.toFixed(4)}%.`;
 
     const correlation = Statistics.correlationTest(set);
+    const averageCorrelation = correlation.map((range: any) => range.difference_percent)
+      .reduce((acc: number, cur: number) => acc + cur) * 100 / correlation.length;;
     this.tests.correlation = correlation.map((range: any, index: number): string =>
       `Сдвиг на ${index + 1}: ${range.accordances} совпадений, ${range.disaccordances} отличий, ` +
       `разница: ${(range.difference_percent * 100).toFixed(0)}%, тест ${range.testSucceed ? 'пройден' : 'не пройден'}.`)
       .join('\n');
-    this.tests.correlation += `\nТест ${correlation.testSucceed ? 'пройден' : 'не пройден'}.`;
+    this.tests.correlation += `\nСредняя разница составила: ${averageCorrelation.toFixed(4)}%.`;
     this.checkTime(t0);
   }
 
