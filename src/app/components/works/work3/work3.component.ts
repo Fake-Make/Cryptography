@@ -55,10 +55,11 @@ export class Work3Component implements OnInit {
 
   getGamma(method: 'random' | 'scrambler' = 'random'): void {
     const gammaSize = this.checkedGost ? 256 : 64;
-    this.gamma = {
+    const binGamma = {
       random: Gamma.getSimpleGamma(gammaSize),
       scrambler: Gamma.getScramblerGamma(gammaSize).gamma
     }[method];
+    this.gamma = this.fromBin('gamma', binGamma);
   }
 
   applyCipher(direction: 'direct' | 'reverse'): void {
