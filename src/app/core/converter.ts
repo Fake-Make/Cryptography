@@ -1,6 +1,6 @@
 export class Converter {
 	static bytesToStr(bytes: number[]): string {
-		return String.fromCharCode(...bytes);
+		return new TextDecoder().decode(new Uint8Array(bytes));
 	}
 
 	static bytesToBin(bytes: number[]): string {
@@ -18,7 +18,7 @@ export class Converter {
 	}
 	
 	static strToBytes(str: string): number[] {
-		return str.split('').map((char: string) => char.charCodeAt(0));
+		return Array.from(new TextEncoder().encode(str));
 	}
 
 	static strToBin(str: string): string {
