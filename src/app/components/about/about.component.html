@@ -19,7 +19,7 @@
 			</mat-card-header>
 		</mat-card>
 	</section>
-	<section class="mw-250">
+	<section class="mw-250" *ngIf="false">
 		<h2 class="mat-title">Ссылки</h2>
 		<a mat-stroked-button href="https://github.com/Fake-Make/Cryptography" target="_blank">GitHub</a>
 		<a style="margin-left:20px" mat-stroked-button href="https://trello.com/b/VxXY1Ql1/" target="_blank">Trello</a>
@@ -82,7 +82,7 @@
 			</mat-expansion-panel>
 		</mat-accordion>
 	</section>
-	<section>
+	<section *ngIf="false">
 		<h2 class="mat-title">Отчёты</h2>
 		<mat-list>
 			<mat-list-item *ngFor="let work of [1, 2, 3, 4, 5, 6]" matRipple
